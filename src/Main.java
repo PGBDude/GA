@@ -1,4 +1,3 @@
-import java.io.BufferedReader;
 import java.io.File;
 import java.util.LinkedList;
 import java.util.Scanner;
@@ -29,6 +28,7 @@ public class Main {
             }catch(Exception e){
                 System.out.println(e);
             }
+            population.debbuging();
         }
     }
 }

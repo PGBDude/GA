@@ -1,12 +1,41 @@
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.LinkedList;
 import java.util.Random;
 
 public class Population implements Serializable {
 
     private ArrayList<Individual> pop = new ArrayList();
     public int nrIndividuals;
+    public double popFitness;
+
+    public void calculatePopFitness(){
+        double sum = 0;
+        calculateIndividualFitness();
+        for(int i = 0; i < pop.size(); i++){
+            sum += pop.get(i).getFitness();
+        }
+        this.popFitness = sum / pop.size();
+    }
+
+    public void mutatePopulation(){
+        for (int i = 0; i < pop.size(); i++) {
+            pop.get(i).mutate();
+        }
+    }
+
+    public void calculateIndividualFitness(){
+        for (int i = 0; i < pop.size(); i++) {
+            pop.get(i).calculateFitness();
+        }
+    }
+
+    public void debbuging(){
+        System.out.println("Best specimen: " + selectBestSpecimen().getFitness());
+        System.out.println("Worst : " + selectWorstSpecimen().getFitness());
+        calculatePopFitness();
+        System.out.println("Population fitness: " + this.popFitness);
+    }
 
     Population(Population newPop) {
         this.pop.addAll(newPop.pop);
@@ -42,59 +71,27 @@ public class Population implements Serializable {
         return this.pop.get(RouletteWheelSelect());
     }
 
-    public Individual tournamentSelection(int tournamentSize){
-        Individual winner;
-        ArrayList<Individual> winnersCircle = new ArrayList<>();
+    public ArrayList<Individual>  Crossover(Individual parent1, Individual parent2, Integer nrGenes){
+        ArrayList<Individual> offspring = new ArrayList<>();
+        Individual offspring1 = new Individual();
+        Individual offspring2 = new Individual();
         Random randomGenerator = new Random();
-        if(this.pop.size()<tournamentSize){
-            System.out.printf("The population size is too small for tournament selection.");
+        Integer r = randomGenerator.nextInt(nrGenes);
+        LinkedList<Double> genesP1 = parent1.getGenes(), genesP2 = parent2.getGenes();
+
+        for(int i=0; i<nrGenes;i++){
+            if(i < r) {
+               offspring1.setGenes(i, genesP1.get(i));
+               offspring2.setGenes(i, genesP2.get(i));
+            }
+            else {
+                offspring1.setGenes(i, genesP2.get(i));
+                offspring2.setGenes(i, genesP1.get(i));
+            }
         }
-
-        for (int j = 0; j < tournamentSize; j++){
-            Integer rng = randomGenerator.nextInt(this.pop.size());
-            int vectorIndex = rng % pop.size();
-            winnersCircle.add(this.pop.get(vectorIndex));
-        }
-        winnersCircle.sort(Individual::compareTo);
-        winner = Collections.min(winnersCircle,null);
-        return winner;
-    }
-
-    public int RankSelect(){
-        Individual ind;
-        ArrayList<Double> ranks = new ArrayList<>();
-        Random randomGenerator = new Random();
-        Integer psize = this.pop.size();
-
-        Integer rsum = psize*(psize+1)/2;
-
-        for(int i=0;i<psize;i++){
-            ranks.add(i,1.0*(psize-1-i)/rsum);
-        }
-        double value = randomGenerator.nextDouble()*rsum;
-
-        for(int i=0;i<psize;i++){
-            value-=ranks.get(i);
-            if(value<0)  return i;
-        }
-        return pop.size()-1;
-    }
-
-    public Individual RankSelection(int index) {
-        ArrayList<Individual> population = new ArrayList<>();
-
-        Integer psize = this.pop.size();
-        for(int i=0;i<psize;i++)
-            population.add(this.pop.get(i));
-
-        population.sort(Individual::compareTo);
-        return population.get(index);
-    }
-
-    public Individual selectRandomIndividual(){
-        Random rnd = new Random();
-        Individual ind = (Individual) this.pop.get(rnd.nextInt(this.pop.size()));
-        return ind;
+        offspring.add(0,offspring1);
+        offspring.add(1,offspring2);
+        return offspring;
     }
 
     public Individual selectBestSpecimen(){
