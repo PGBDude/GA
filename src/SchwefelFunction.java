@@ -1,33 +1,21 @@
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 public class SchwefelFunction {
 
-    Chromosome ch;
-
-
-    public SchwefelFunction(Chromosome ch) {
-        this.ch = ch;
-    }
-
-    public double Schwefel() {
+    public double Schwefel(Individual individ) {
         double sum = 0;
         double genesSum = 0;
+        LinkedList<Double> genes = individ.getGenes();
 
+        for (int j = 0; j < individ.geneSize(); j++) {
 
-
-        int genesNumber = 0;
-        genesNumber = ch.chromosomeGenes.size();
-        for (int j = 0; j < genesNumber; j++) {
-            double geneVal = ch.chromosomeGenes.get(j);
-
-            genesSum += geneVal;
-            sum += geneVal * Math.sin(Math.sqrt(Math.abs(geneVal)));
+            genesSum += genes.get(j);
+            sum += genes.get(j) * Math.sin(Math.sqrt(Math.abs(genes.get(j))));
         }
 
-        double f = 418.9829 *  genesNumber;
+        double f = 418.9829 *  individ.geneSize();
         f -= sum;
-
         return f;
-
     }
 }
