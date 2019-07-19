@@ -4,15 +4,17 @@ import java.util.Random;
 public class Individual implements Comparable<Individual> {
 
     private double fitness;
-    private double mutationChange = 0.05;
-    private LinkedList<Double> genes = new LinkedList<>();
+    private double mutationChange = 0.25;
+    private LinkedList<Double> genes;
 
     Individual(LinkedList<Double> gene){
+        genes = new LinkedList<>();
         this.genes = gene;
         this.fitness = 0;
     }
 
     Individual(){
+        genes = new LinkedList<>();
         this.fitness = 0;
     }
 
@@ -43,7 +45,12 @@ public class Individual implements Comparable<Individual> {
     }
 
     public void setGenes(int index, double gene){
-        genes.set(index, gene);
+        this.genes.set(index, gene);
+    }
+
+    public void debugIndividual(){
+        System.out.println("Individual genes: " + genes.toString());
+        System.out.println("Gene length: " + genes.size());
     }
 
     public double getFitness(){
