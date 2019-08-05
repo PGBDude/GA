@@ -64,24 +64,25 @@ public class Population implements Serializable {
         Individual  ind;
         Random randomGenerator = new Random();
         Double Sum = 0.0;
-        for(int i = 0; i < individuals.size(); i++){
+        for(int i=0;i<this.popSize();i++){
             ind = individuals.get(i);
-            Sum += ind.getFitness();
+            Sum+=ind.getFitness();
         }
-
         double value = randomGenerator.nextDouble()*Sum;
 
-        for(int i = 0; i< individuals.size(); i++){
+        for(int i=0;i<this.popSize();i++){
             ind = individuals.get(i);
             value-=ind.getFitness();
             if(value<0)  return i;
         }
-        return individuals.size()-1;
+        return popSize()-1;
     }
 
     public Individual RouletteWheelSelection(){
-        return this.individuals.get(RouletteWheelSelect());
+        return individuals.get(RouletteWheelSelect());
     }
+
+
 
     public ArrayList<Individual>  Crossover(Individual parent1, Individual parent2, Integer nrGenes){
         ArrayList<Individual> offspring = new ArrayList<>();

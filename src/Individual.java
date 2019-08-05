@@ -4,7 +4,7 @@ import java.util.Random;
 public class Individual implements Comparable<Individual> {
 
     private double fitness;
-    private double mutationChange = 0.25;
+    private double mutationChange = 0.1;
     private LinkedList<Double> genes;
 
     Individual(LinkedList<Double> gene){

@@ -52,8 +52,8 @@ public class Main {
                 }else{
                     optimaCounter = 0;
                 }
-                if(optimaCounter == 15){
-                    System.out.println("15 generations had the same fitness! Local optima found after " + Population.generation + " generations!");
+                if(optimaCounter == 10){
+                    System.out.println("10 generations had the same fitness! Local optima found after " + Population.generation + " generations!");
                     break;
                 }
                 lastPopFitness = population.getPopFitness();
