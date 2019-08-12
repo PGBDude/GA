@@ -39,7 +39,7 @@ public class Population implements Serializable {
     public void debbuging(){
         System.out.println("-------------------------------------------------------------------------");
         System.out.println("Generation : " + Population.generation);
-        System.out.println("Population size: " + this.popSize());
+        //System.out.println("Population size: " + this.popSize());
         System.out.println("Best specimen: " + selectBestSpecimen().getFitness());
         //System.out.println("Best Specimen Genes: " + selectBestSpecimen().getGenes().toString());
         System.out.println("Worst : " + selectWorstSpecimen().getFitness());
@@ -65,7 +65,7 @@ public class Population implements Serializable {
     public int RouletteWheelSelect(){
         Individual  ind;
         Collections.sort(individuals);
-        Collections.reverse(individuals);
+        //Collections.reverse(individuals);
         Random randomGenerator = new Random();
         Double Sum = 0.0;
         for(int i=0;i<this.popSize();i++){
@@ -75,11 +75,16 @@ public class Population implements Serializable {
         double value = randomGenerator.nextDouble()*Sum;
 
         for(int i=0;i<this.popSize();i++){
-            ind = individuals.get(i);
+            ind = individuals.get((individuals.size()-1)-i);
             value-=ind.getFitness();
             if(value<0)  return i;
         }
         return popSize()-1;
+    }
+
+    public Individual randomSelect(){
+        Random r = new Random();
+        return individuals.get(r.nextInt(individuals.size()));
     }
 
     public Individual RouletteWheelSelection(){

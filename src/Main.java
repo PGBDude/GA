@@ -38,8 +38,8 @@ public class Main {
                 population.calculatePopFitness();
                 //population.debbuging();
                 for (int i = 0; i < population.popSize(); i++) {
-                    Individual parent1 = population.RouletteWheelSelection();
-                    Individual parent2 = population.RouletteWheelSelection();
+                    Individual parent1 = population.randomSelect();
+                    Individual parent2 = population.randomSelect();
                     ArrayList<Individual> children = population.Crossover(parent1, parent2, parent1.geneSize());
                     children.get(0).calculateFitness();
                     children.get(1).calculateFitness();
