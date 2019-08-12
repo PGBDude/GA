@@ -1,8 +1,5 @@
 import java.io.File;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Scanner;
-import java.util.StringTokenizer;
+import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
@@ -34,14 +31,24 @@ public class Main {
             //Algorithm loop
             lastPopFitness = population.getPopFitness();
             while(generations-- > 0){
+
+                ArrayList<Individual> temp = new ArrayList();
                 Population offspring = new Population();
+                population.calculateIndividualFitness();
+                population.calculatePopFitness();
                 //population.debbuging();
-                for (int i = 0; i < population.popSize()/2; i++) {
+                for (int i = 0; i < population.popSize(); i++) {
                     Individual parent1 = population.RouletteWheelSelection();
                     Individual parent2 = population.RouletteWheelSelection();
                     ArrayList<Individual> children = population.Crossover(parent1, parent2, parent1.geneSize());
-                    offspring.addIndividual(children.get(0));
-                    offspring.addIndividual(children.get(1));
+                    children.get(0).calculateFitness();
+                    children.get(1).calculateFitness();
+                    temp.add(children.get(0));
+                    temp.add(children.get(1));
+                }
+                Collections.sort(temp);
+                for (int i = 0; i < popSize; i++) {
+                    offspring.addIndividual(temp.get(i));
                 }
                 population = offspring;
                 population.mutatePopulation();
